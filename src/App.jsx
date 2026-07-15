@@ -37,8 +37,23 @@ const PROJECTS = [
     thumb: '/tikur-abay-cover.png'
   },
   {
-
-
+    id: 'vora-addis-hotel',
+    name: 'Vora Addis Hotel',
+    badge: 'In Progress',
+    desc: 'A full-stack luxury hotel management system featuring room booking, restaurant, gym, nightclub, and meetings modules. Includes staff login, guest bookings dashboard, and a light/dark mode toggle.',
+    tech: [
+      { name: 'HTML', icon: 'bxl-html5', color: '#e34f26' },
+      { name: 'CSS', icon: 'bxl-css3', color: '#1572b6' },
+      { name: 'JavaScript', icon: 'bxl-javascript', color: '#f7df1e' },
+      { name: 'PHP', icon: 'bxl-php', color: '#777bb4' },
+      { name: 'MySQL', icon: 'bx-data', color: '#00758f' }
+    ],
+    gradient: 'linear-gradient(135deg, #0a0f1e, #c8a84b)',
+    demoUrl: 'https://github.com/mesfin/vora-addis-hotel',
+    codeUrl: 'https://github.com/mesfin/vora-addis-hotel',
+    thumb: '/vora-addis-cover.png'
+  },
+  {
     id: 'one-prime-gym',
     name: 'One Prime Gym',
     badge: 'In Progress',
@@ -109,6 +124,7 @@ function App() {
   const [shares, setShares] = useState(15);
   const [statusMsg, setStatusMsg] = useState('online · ready to connect');
   const [isLightTheme, setIsLightTheme] = useState(false);
+  const [msgStyle, setMsgStyle] = useState('#4ee1a0');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTech, setSelectedTech] = useState('All');
   const [consoleOpen, setConsoleOpen] = useState(false);
@@ -174,11 +190,11 @@ function App() {
 
   const handleProjectClick = (e, projectName, type, url) => {
     e.preventDefault();
+    // Open immediately — window.open inside setTimeout loses the user-gesture
+    // context and gets silently blocked as a popup by the browser.
+    window.open(url, '_blank', 'noopener,noreferrer');
     addLog(`GET /api/project-click - 200 OK - { project: "${projectName}", type: "${type}" }`, 'info');
     setTemporaryStatus(`redirecting to ${type}...`, '#5ae9aa');
-    setTimeout(() => {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }, 500);
   };
 
   // Log initial connection on startup; return cleanup to cancel timers on unmount
