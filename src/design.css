@@ -214,8 +214,18 @@
   transition: var(--transition);
   padding: 20px;
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  animation: fadeSlideUp 0.6s ease-out backwards;
 }
+
+/* Stagger animations for skill cards */
+.skills-grid .skill-card:nth-child(1) { animation-delay: 0.1s; }
+.skills-grid .skill-card:nth-child(2) { animation-delay: 0.2s; }
+.skills-grid .skill-card:nth-child(3) { animation-delay: 0.3s; }
+.skills-grid .skill-card:nth-child(4) { animation-delay: 0.4s; }
+.skills-grid .skill-card:nth-child(5) { animation-delay: 0.5s; }
+.skills-grid .skill-card:nth-child(6) { animation-delay: 0.6s; }
 
 .skill-card:hover {
   background-color: var(--bg-secondary);
@@ -345,13 +355,22 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 20px;
-  transition: var(--transition), transform 0.3s ease;
+  transition: var(--transition), transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: fadeSlideUp 0.8s ease-out backwards;
 }
 
+/* Stagger animations for project cards */
+.projects-grid .project-card:nth-child(1) { animation-delay: 0.1s; }
+.projects-grid .project-card:nth-child(2) { animation-delay: 0.2s; }
+.projects-grid .project-card:nth-child(3) { animation-delay: 0.3s; }
+.projects-grid .project-card:nth-child(4) { animation-delay: 0.4s; }
+.projects-grid .project-card:nth-child(5) { animation-delay: 0.5s; }
+.projects-grid .project-card:nth-child(6) { animation-delay: 0.6s; }
+
 .project-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(78, 225, 160, 0.2);
   border-color: var(--accent);
 }
 
@@ -754,6 +773,17 @@
   100% {
     transform: scale(0.9);
     opacity: 0.6;
+  }
+}
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
