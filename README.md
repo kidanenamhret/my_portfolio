@@ -1,4 +1,4 @@
-# Mesfine Portfolio (React + Vite)
+# Mesfin Portfolio (React + Vite)
 
 ![Demo Screenshot](file:///c:/Users/tadwo/Desktop/html/build_portfolio/react_portfolio/screenshot.png)
 
@@ -38,9 +38,9 @@ react_portfolio/
 ```
 
 ## 📞 Contact
-- **GitHub:** [mesfine](https://github.copowm/kidanenamhret)
-- **LinkedIn:** [Mesfine](https://www.linkedin.com/in/mesfine)
-- **Twitter:** [@mesfine](https://twitter.com/mesfine)
+- **GitHub:** [mesfin](https://github.com/kidanenamhret)
+- **LinkedIn:** [Mesfin](https://www.linkedin.com/in/mesfin-alemayehu-98579a34b)
+- **Twitter:** [@mesfin](https://twitter.com/mesfin)
 
 ---
 *Feel free to fork the repo, open issues, or submit pull‑requests.*

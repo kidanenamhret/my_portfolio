@@ -1,5 +1,122 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './design.css';
+
+// ─── Static data outside component to avoid recreation on every render ────────
+
+const PROJECTS = [
+  {
+    id: 'omr-hu',
+    name: 'OMR HU',
+    badge: 'Hosted',
+    desc: 'Orthodox Members Registry for Hawassa University Fellowship. A full-stack Progressive Web App (PWA) for managing student records, academic/department distributions (with Recharts), mentorship bonds, spiritual profiles, and Telegram broadcast notifications.',
+    tech: [
+      { name: 'React', icon: 'bxl-react', color: '#61dafb' },
+      { name: 'Tailwind CSS', icon: 'bxl-tailwind-css', color: '#38bdf8' },
+      { name: 'Node.js', icon: 'bxl-nodejs', color: '#339933' },
+      { name: 'MongoDB', icon: 'bx-data', color: '#47a248' }
+    ],
+    gradient: 'linear-gradient(135deg, #800020, #c8a84b)',
+    demoUrl: 'https://omr-hu-3b9e.vercel.app/',
+    codeUrl: 'https://github.com/mesfin/omr-hu',
+    thumb: '/omr-hu-cover.png'
+  },
+  {
+    id: 'vora-addis-hotel',
+    name: 'Vora Addis Hotel',
+    badge: 'In Progress',
+    desc: 'A full-stack luxury hotel management system featuring room booking, restaurant, gym, nightclub, and meetings modules. Includes staff login, guest bookings dashboard, and a light/dark mode toggle.',
+    tech: [
+      { name: 'HTML', icon: 'bxl-html5', color: '#e34f26' },
+      { name: 'CSS', icon: 'bxl-css3', color: '#1572b6' },
+      { name: 'JavaScript', icon: 'bxl-javascript', color: '#f7df1e' },
+      { name: 'PHP', icon: 'bxl-php', color: '#777bb4' },
+      { name: 'MySQL', icon: 'bx-data', color: '#00758f' }
+    ],
+    gradient: 'linear-gradient(135deg, #0a0f1e, #c8a84b)',
+    demoUrl: 'https://github.com/mesfin/vora-addis-hotel',
+    codeUrl: 'https://github.com/mesfin/vora-addis-hotel',
+    thumb: '/vora-addis-cover.png'
+  },
+  {
+    id: 'one-prime-gym',
+    name: 'One Prime Gym',
+    badge: 'In Progress',
+    desc: 'A modern fitness platform for One Prime Gym featuring trainer profiles, class scheduling, membership pricing, a BMI calculator, and a member login portal. Designed for Ethiopian fitness coaches and clients.',
+    tech: [
+      { name: 'HTML', icon: 'bxl-html5', color: '#e34f26' },
+      { name: 'CSS', icon: 'bxl-css3', color: '#1572b6' },
+      { name: 'JavaScript', icon: 'bxl-javascript', color: '#f7df1e' },
+      { name: 'PHP', icon: 'bxl-php', color: '#777bb4' }
+    ],
+    gradient: 'linear-gradient(135deg, #0a0a0a, #39ff14)',
+    demoUrl: 'https://github.com/mesfin/one-prime-gym',
+    codeUrl: 'https://github.com/mesfin/one-prime-gym',
+    thumb: '/one-prime-cover.png'
+  },
+  {
+    id: 'ethio-farmers-market',
+    name: 'Ethio Farmers Market',
+    badge: 'Hosted',
+    desc: 'A localized e‑commerce platform designed to bridge the gap between Ethiopian farmers and consumers. Features role‑based user/admin access, interactive inventory CRUD, order management, and AJAX live search.',
+    tech: [
+      { name: 'PHP', icon: 'bxl-php', color: '#777bb4' },
+      { name: 'MySQL', icon: 'bx-data', color: '#00758f' },
+      { name: 'JavaScript', icon: 'bxl-javascript', color: '#f7df1e' },
+      { name: 'CSS3', icon: 'bxl-css3', color: '#1572b6' }
+    ],
+    gradient: 'linear-gradient(135deg, #1d4a2b, #4a7c59)',
+    // TODO: replace demoUrl with live hosted URL when available
+    demoUrl: 'https://github.com/mesfin/ethio-farmers-market',
+    codeUrl: 'https://github.com/mesfin/ethio-farmers-market',
+    thumb: '/ethio-market/home.png'
+  },
+  {
+    id: 'tade-campus-event',
+    name: 'Tade Campus Event',
+    badge: 'Desktop App',
+    desc: 'A desktop Campus Event Management System with robust role governance (Admin/User), SQLite database configuration, alerts management, and view transition control.',
+    tech: [
+      { name: 'Java', icon: 'bxl-java', color: '#f89820' },
+      { name: 'JavaFX', icon: 'bx-desktop', color: '#5382a1' },
+      { name: 'SQLite', icon: 'bx-data', color: '#003b57' }
+    ],
+    gradient: 'linear-gradient(135deg, #1e3c72, #2a5298)',
+    demoUrl: 'https://github.com/mesfin/tade-campus/releases',
+    codeUrl: 'https://github.com/mesfin/tade-campus',
+    thumb: '/tade-campus.png'
+  },
+  {
+    id: 'tikur-abay-bank',
+    name: 'Tikur Abay Bank',
+    badge: 'Demo',
+    desc: 'Educational banking UI demo showcasing login flow and secure UI components. Built with HTML, CSS, PHP backend, and Font Awesome icons.',
+    tech: [
+      { name: 'HTML', icon: 'bxl-html5', color: '#e34f26' },
+      { name: 'CSS', icon: 'bxl-css3', color: '#1572b6' },
+      { name: 'PHP', icon: 'bxl-php', color: '#777bb4' },
+      { name: 'Font Awesome', icon: 'bxl-fontawesome', color: '#039be5' }
+    ],
+    gradient: 'linear-gradient(135deg, #020617, #1e1b4b)',
+    demoUrl: 'http://mesfina6305.infinityfreeapp.com/',
+    codeUrl: 'https://github.com/mesfin/tikur-abay-bank',
+    thumb: '/tikur-abay-cover.png'
+  },
+];
+
+// 'React' and 'Tailwind CSS' added since OMR HU uses them
+const FILTER_TAGS = ['All', 'React', 'Tailwind CSS', 'HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL', 'Java', 'JavaFX', 'SQLite'];
+
+const SOCIALS = [
+  { icon: 'bxl-github', aria: 'github', url: 'https://github.com/mesfin' },
+  { icon: 'bx-code-alt', aria: 'frontend-mentor', url: 'https://www.frontendmentor.io' },
+  { icon: 'bxl-linkedin', aria: 'linkedin', url: 'https://linkedin.com' },
+  { icon: 'bxl-twitter', aria: 'twitter', url: 'https://twitter.com' }
+];
+
+// Maximum log entries kept in memory to prevent unbounded growth
+const MAX_LOGS = 50;
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 function App() {
   // Reactive stats (synced with console log widget)
@@ -13,115 +130,43 @@ function App() {
   const [consoleOpen, setConsoleOpen] = useState(false);
   const [consoleLogs, setConsoleLogs] = useState([]);
 
-  // Projects database (retained from original file)
-  const projects = [
-    {
-      name: 'Ethio Farmers Market',
-      badge: 'Hosted',
-      desc: 'A localized e‑commerce platform designed to bridge the gap between Ethiopian farmers and consumers. Features role‑based user/admin access, interactive inventory CRUD, order management, and AJAX live search.',
-      tech: [
-        { name: 'PHP', icon: 'bxl-php', color: '#777bb4' },
-        { name: 'MySQL', icon: 'bx-data', color: '#00758f' },
-        { name: 'JavaScript', icon: 'bxl-javascript', color: '#f7df1e' },
-        { name: 'CSS3', icon: 'bxl-css3', color: '#1572b6' }
-      ],
-      gradient: 'linear-gradient(135deg, #1d4a2b, #4a7c59)',
-      demoUrl: 'http://localhost/Ethio-Farmers_Market/public/index.php',
-      codeUrl: 'https://github.com/mesfine/ethio-farmers-market'
-    },
-    {
-      name: 'Tade Campus Event',
-      badge: 'Desktop App',
-      desc: 'A desktop Campus Event Management System with robust role governance (Admin/User), SQLite database configuration, alerts management, and view transition control.',
-      tech: [
-        { name: 'Java', icon: 'bxl-java', color: '#f89820' },
-        { name: 'JavaFX', icon: 'bx-desktop', color: '#5382a1' },
-        { name: 'SQLite', icon: 'bx-data', color: '#003b57' }
-      ],
-      gradient: 'linear-gradient(135deg, #1e3c72, #2a5298)',
-      demoUrl: 'https://github.com/mesfine/tade-campus/releases',
-      codeUrl: 'https://github.com/mesfine/tade-campus'
-    },
-    {
-      name: 'Simple Calculator',
-      badge: 'Vanilla JS',
-      desc: 'A fast and clean browser‑based calculator implementing standard algebraic calculations and a sleek responsive interactive display.',
-      tech: [
-        { name: 'JavaScript', icon: 'bxl-javascript', color: '#f7df1e' },
-        { name: 'HTML5', icon: 'bxl-html5', color: '#e34f26' },
-        { name: 'CSS3', icon: 'bxl-css3', color: '#1572b6' }
-      ],
-      gradient: 'linear-gradient(135deg, #f12711, #f5af19)',
-      demoUrl: 'http://localhost/calculator',
-      codeUrl: 'https://github.com/mesfine/simple-calculator'
-    },
-    {
-      name: 'Mesfine Portfolio (Vercel)',
-      badge: 'Live Demo',
-      desc: 'My personal portfolio showcasing projects, tech stack, and interactive UI built with React and Vite.',
-      tech: [
-        { name: 'React', icon: 'bxl-react', color: '#61dafb' },
-        { name: 'Vite', icon: 'bxl-vite', color: '#ffd62e' },
-        { name: 'CSS3', icon: 'bxl-css3', color: '#1572b6' }
-      ],
-      gradient: 'linear-gradient(135deg, #0f2027, #203a43)',
-      demoUrl: 'http://mesfina6305.infinityfreeapp.com/',
-      codeUrl: 'https://github.com/mesfine/portfolio'
-    },
-    {
-      name: 'Mesfin Blog (InfinityFree)',
-      badge: 'Live Site',
-      desc: 'A blog platform hosting articles about development, tech trends, and personal stories.',
-      tech: [
-        { name: 'PHP', icon: 'bxl-php', color: '#777bb4' },
-        { name: 'MySQL', icon: 'bx-data', color: '#00758f' },
-        { name: 'Bootstrap', icon: 'bxl-bootstrap', color: '#7952b3' }
-      ],
-      gradient: 'linear-gradient(135deg, #ff512f, #dd2476)',
-      demoUrl: 'http://mesfina6305.infinityfreeapp.com/',
-      codeUrl: 'https://github.com/mesfine/blog'
-    }
-  ];
+  // Ref to cancel pending status-reset timeout and avoid stale closures
+  const statusTimeoutRef = useRef(null);
 
-  const filterTags = ['All', 'PHP', 'MySQL', 'Java', 'JavaFX', 'SQLite', 'JavaScript', 'React'];
-
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          project.desc.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredProjects = PROJECTS.filter(project => {
+    const matchesSearch =
+      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.desc.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesTech = selectedTech === 'All' || project.tech.some(t => t.name === selectedTech);
     return matchesSearch && matchesTech;
   });
 
-  const socials = [
-    { icon: 'bxl-github', aria: 'github', url: 'https://github.com/mesfine' },
-    { icon: 'bx-code-alt', aria: 'frontend-mentor', url: 'https://www.frontendmentor.io' },
-    { icon: 'bxl-linkedin', aria: 'linkedin', url: 'https://linkedin.com' },
-    { icon: 'bxl-twitter', aria: 'twitter', url: 'https://twitter.com' }
-  ];
-
-  // Helper to append server-style logs
+  // Append a server-style log entry; cap at MAX_LOGS to prevent unbounded growth
   const addLog = (message, type = 'info') => {
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    setConsoleLogs(prev => [...prev, { time, message, type }]);
+    setConsoleLogs(prev => [...prev.slice(-(MAX_LOGS - 1)), { time, message, type }]);
   };
 
   const setTemporaryStatus = (text, color = '#4ee1a0') => {
+    // Cancel any in-flight reset before starting a new one
+    if (statusTimeoutRef.current) clearTimeout(statusTimeoutRef.current);
     setStatusMsg(text);
     setMsgStyle(color);
-    setTimeout(() => {
+    statusTimeoutRef.current = setTimeout(() => {
       setStatusMsg('online · ready to connect');
       setMsgStyle('#4ee1a0');
     }, 2500);
   };
 
   const handleHire = () => {
-    addLog('POST /api/hire - 200 OK - { dev: "Mesfine" }', 'success');
+    addLog('POST /api/hire - 200 OK - { dev: "Mesfin" }', 'success');
     setLikes(l => l + 1);
     setTemporaryStatus('hiring request sent', '#4ee1a0');
   };
 
+  // Used by the console "Trigger /api/message" button only
   const handleMessage = () => {
-    addLog('POST /api/message - 200 OK - { to: "Mesfine" }', 'success');
+    addLog('POST /api/message - 200 OK - { to: "Mesfin" }', 'success');
     addLog('Socket.io - client message dispatched', 'info');
     setMessages(m => m + 1);
     setTemporaryStatus('message delivered', '#4ee1a0');
@@ -139,7 +184,8 @@ function App() {
 
   const handleSocialClick = (name, url) => {
     addLog(`GET /api/track - 200 OK - { social: "${name}" }`, 'info');
-    window.open(url, '_blank');
+    // noopener,noreferrer prevents the new tab from accessing window.opener
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleProjectClick = (e, projectName, type, url) => {
@@ -147,28 +193,33 @@ function App() {
     addLog(`GET /api/project-click - 200 OK - { project: "${projectName}", type: "${type}" }`, 'info');
     setTemporaryStatus(`redirecting to ${type}...`, '#5ae9aa');
     setTimeout(() => {
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'noopener,noreferrer');
     }, 500);
   };
 
-  // Log initial connection on startup
+  // Log initial connection on startup; return cleanup to cancel timers on unmount
   useEffect(() => {
     addLog('System - connecting to simulated Node.js backend...', 'info');
-    setTimeout(() => {
+    const initTimer = setTimeout(() => {
       addLog('Express - server running on port 5000', 'success');
       addLog('MongoDB - database state connected', 'success');
     }, 600);
+    return () => {
+      clearTimeout(initTimer);
+      if (statusTimeoutRef.current) clearTimeout(statusTimeoutRef.current);
+    };
   }, []);
 
   return (
     <div className="portfolio-app">
       {/* Header Container */}
       <header className="header container">
-        <div className="logo">Mesfine</div>
+        <div className="logo">Mesfin</div>
         <nav className="socials">
-          {socials.map((s, idx) => (
+          {/* key uses s.aria (stable unique string) instead of array index */}
+          {SOCIALS.map((s) => (
             <button
-              key={idx}
+              key={s.aria}
               className="social-link"
               onClick={() => handleSocialClick(s.aria, s.url)}
               aria-label={s.aria}
@@ -183,8 +234,11 @@ function App() {
       <main>
         {/* Hero Section */}
         <section className="hero container">
+          <div className="hero-avatar-wrapper">
+            <img src="/profile.png" alt="Mesfin" className="hero-avatar" />
+          </div>
           <h1 className="hero-title">
-            Hello, I'm <span className="hero-name">Mesfine</span>.
+            Hello, I'm <span className="hero-name">Mesfin</span>.
           </h1>
           <p className="hero-desc">
             Based in Ethiopia, I'm a full stack developer passionate about building highly interactive, scalable, and responsive web applications.
@@ -250,7 +304,7 @@ function App() {
               />
             </div>
             <div className="filter-buttons">
-              {filterTags.map(tag => (
+              {FILTER_TAGS.map(tag => (
                 <button
                   key={tag}
                   className={`filter-btn${selectedTech === tag ? ' active' : ''}`}
@@ -265,8 +319,9 @@ function App() {
           {/* Grid of Projects */}
           <div className="projects-grid">
             {filteredProjects.length > 0 ? (
-              filteredProjects.map((proj, idx) => (
-                <div key={idx} className="project-card">
+              filteredProjects.map((proj) => (
+                /* key uses proj.id (stable unique string) instead of array index */
+                <div key={proj.id} className="project-card">
                   <div className="project-img-wrapper">
                     {proj.thumb ? (
                       <img src={proj.thumb} alt={proj.name} className="project-img" />
@@ -296,8 +351,9 @@ function App() {
                   <h3 className="project-name">{proj.name}</h3>
                   <p className="project-desc">{proj.desc}</p>
                   <div className="project-tags">
-                    {proj.tech.map((t, i) => (
-                      <span key={i} style={{ color: t.color }}>
+                    {/* key uses t.name (unique within each project) instead of array index */}
+                    {proj.tech.map((t) => (
+                      <span key={t.name} style={{ color: t.color }}>
                         {t.name}
                       </span>
                     ))}
@@ -323,9 +379,14 @@ function App() {
               </p>
             </div>
             <div className="contact-action">
-              <button className="btn-outline" onClick={handleMessage}>
+              {/* Real mailto: link so clicking actually opens the user's email client */}
+              <a
+                href="mailto:mesfin6323@gmail.com"
+                className="btn-outline"
+                aria-label="Send email to Mesfin"
+              >
                 <i className="bx bx-envelope"></i> Email Me
-              </button>
+              </a>
             </div>
           </div>
         </section>
@@ -336,11 +397,11 @@ function App() {
         <div className="container">
           <hr className="footer-divider" />
           <div className="footer-content">
-            <div className="logo">Mesfine</div>
+            <div className="logo">Mesfin</div>
             <div className="socials">
-              {socials.map((s, idx) => (
+              {SOCIALS.map((s) => (
                 <button
-                  key={idx}
+                  key={s.aria}
                   className="social-link"
                   onClick={() => handleSocialClick(s.aria, s.url)}
                   aria-label={s.aria}
