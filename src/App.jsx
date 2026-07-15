@@ -21,23 +21,24 @@ const PROJECTS = [
     thumb: '/omr-hu-cover.png'
   },
   {
-    id: 'vora-addis-hotel',
-    name: 'Vora Addis Hotel',
-    badge: 'In Progress',
-    desc: 'A full-stack luxury hotel management system featuring room booking, restaurant, gym, nightclub, and meetings modules. Includes staff login, guest bookings dashboard, and a light/dark mode toggle.',
+    id: 'tikur-abay-bank',
+    name: 'Tikur Abay Bank',
+    badge: 'Demo',
+    desc: 'Educational banking UI demo showcasing login flow and secure UI components. Built with HTML, CSS, PHP backend, and Font Awesome icons.',
     tech: [
       { name: 'HTML', icon: 'bxl-html5', color: '#e34f26' },
       { name: 'CSS', icon: 'bxl-css3', color: '#1572b6' },
-      { name: 'JavaScript', icon: 'bxl-javascript', color: '#f7df1e' },
       { name: 'PHP', icon: 'bxl-php', color: '#777bb4' },
-      { name: 'MySQL', icon: 'bx-data', color: '#00758f' }
+      { name: 'Font Awesome', icon: 'bxl-fontawesome', color: '#039be5' }
     ],
-    gradient: 'linear-gradient(135deg, #0a0f1e, #c8a84b)',
-    demoUrl: 'https://github.com/mesfin/vora-addis-hotel',
-    codeUrl: 'https://github.com/mesfin/vora-addis-hotel',
-    thumb: '/vora-addis-cover.png'
+    gradient: 'linear-gradient(135deg, #020617, #1e1b4b)',
+    demoUrl: 'http://mesfina6305.infinityfreeapp.com/',
+    codeUrl: 'https://github.com/mesfin/tikur-abay-bank',
+    thumb: '/tikur-abay-cover.png'
   },
   {
+
+
     id: 'one-prime-gym',
     name: 'One Prime Gym',
     badge: 'In Progress',
@@ -65,7 +66,6 @@ const PROJECTS = [
       { name: 'CSS3', icon: 'bxl-css3', color: '#1572b6' }
     ],
     gradient: 'linear-gradient(135deg, #1d4a2b, #4a7c59)',
-    // TODO: replace demoUrl with live hosted URL when available
     demoUrl: 'https://github.com/mesfin/ethio-farmers-market',
     codeUrl: 'https://github.com/mesfin/ethio-farmers-market',
     thumb: '/ethio-market/home.png'
@@ -84,23 +84,7 @@ const PROJECTS = [
     demoUrl: 'https://github.com/mesfin/tade-campus/releases',
     codeUrl: 'https://github.com/mesfin/tade-campus',
     thumb: '/tade-campus.png'
-  },
-  {
-    id: 'tikur-abay-bank',
-    name: 'Tikur Abay Bank',
-    badge: 'Demo',
-    desc: 'Educational banking UI demo showcasing login flow and secure UI components. Built with HTML, CSS, PHP backend, and Font Awesome icons.',
-    tech: [
-      { name: 'HTML', icon: 'bxl-html5', color: '#e34f26' },
-      { name: 'CSS', icon: 'bxl-css3', color: '#1572b6' },
-      { name: 'PHP', icon: 'bxl-php', color: '#777bb4' },
-      { name: 'Font Awesome', icon: 'bxl-fontawesome', color: '#039be5' }
-    ],
-    gradient: 'linear-gradient(135deg, #020617, #1e1b4b)',
-    demoUrl: 'http://mesfina6305.infinityfreeapp.com/',
-    codeUrl: 'https://github.com/mesfin/tikur-abay-bank',
-    thumb: '/tikur-abay-cover.png'
-  },
+  }
 ];
 
 // 'React' and 'Tailwind CSS' added since OMR HU uses them
@@ -124,7 +108,7 @@ function App() {
   const [messages, setMessages] = useState(23);
   const [shares, setShares] = useState(15);
   const [statusMsg, setStatusMsg] = useState('online · ready to connect');
-  const [msgStyle, setMsgStyle] = useState('#4ee1a0');
+  const [isLightTheme, setIsLightTheme] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTech, setSelectedTech] = useState('All');
   const [consoleOpen, setConsoleOpen] = useState(false);
@@ -211,7 +195,7 @@ function App() {
   }, []);
 
   return (
-    <div className="portfolio-app">
+    <div className={`portfolio-app ${isLightTheme ? 'light-theme' : ''}`}>
       {/* Header Container */}
       <header className="header container">
         <div className="logo">Mesfin</div>
@@ -229,6 +213,13 @@ function App() {
             </button>
           ))}
         </nav>
+        <button
+          className="theme-toggle"
+          onClick={() => setIsLightTheme(prev => !prev)}
+          aria-label="Toggle theme"
+        >
+          <i className={isLightTheme ? 'bx bx-moon' : 'bx bx-sun'}></i>
+        </button>
       </header>
 
       <main>
